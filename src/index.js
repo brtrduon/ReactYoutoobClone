@@ -13,12 +13,15 @@ class App extends Component {
         // constructor always gets called with props
         super(props);
 
-        this.state = { videos: [] };
+        this.state = { videos: [],
+            selectedVideo: null
+        };
 
         YTSearch({key: API_KEY, term: 'surfboards'}, (videos) => {
-            this.setState({ videos });
-            // in ES6, when the key and var are the same name, we can simply type it as the line above
-            // i.e. the line above is equivalent to this.setState({ videos: videos })
+            this.setState({
+                videos: videos,
+                selectedVideo: videos[0]
+            });
         });
     }
 
@@ -26,8 +29,10 @@ class App extends Component {
         return (
             <div>
                 <SearchBar />
-                <VideoDetail video={this.state.videos[0]} />
-                <VideoList videos={this.state.videos} />
+                <VideoDetail video={this.state.selectedVideo} />
+                <VideoList
+                onVideoSelect={selectedVideo => this.setState({selectedVideo})}
+                videos={this.state.videos} />
             </div>
         );
     }
